@@ -20,7 +20,6 @@ contract Splitter is Owned {
     }
     
     function addParticipant(address participant, bytes32 name) public _onlyOwner returns(bool) {
-        require(participant != owner);
         require(!isParticipant(participant));
         
         participantList.push(participant);
