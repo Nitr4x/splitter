@@ -13,7 +13,9 @@ contract Splitter is Owned {
     mapping(address => Person) participantStorage;
     address[] participantList;
 
-    constructor() public payable {}
+    constructor(bytes32 name) public payable {
+        addParticipant(msg.sender, name);
+    }
     
     function isParticipant(address participant) internal view returns(bool) {
         return participantStorage[participant].isParticipant;    
