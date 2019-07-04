@@ -7,7 +7,7 @@ contract Owned {
     event LogOwnerChanged(address indexed newOwner);
     
     modifier _onlyOwner {
-        require(msg.sender == owner);
+        require(msg.sender == owner, 'Only the owner can change the contract\'s owner');
         _;
     }
     

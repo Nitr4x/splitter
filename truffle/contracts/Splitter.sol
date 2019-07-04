@@ -16,7 +16,7 @@ contract Splitter is Stoppable {
     constructor() public payable {}
     
     function splitEth(address receiver1, address receiver2) public _onlyIfRunning payable returns(bool) {
-        require(msg.value <= msg.sender.balance);
+        require(msg.value <= msg.sender.balance, 'The sender balance shoud be higher the ether\'s value');
 
         accountStorage[receiver1].pendingWithdrawals += msg.value / 2;
         accountStorage[receiver2].pendingWithdrawals += msg.value / 2;
@@ -30,7 +30,7 @@ contract Splitter is Stoppable {
         return address(this).balance;    
     }
     
-    function withdraw() public _onlyIfRunning returns(bool) {
+    function withdraw() public returns(bool) {
         uint amount = accountStorage[msg.sender].pendingWithdrawals;
         
         accountStorage[msg.sender].pendingWithdrawals = 0;
