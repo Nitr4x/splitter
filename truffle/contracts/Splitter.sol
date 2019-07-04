@@ -4,7 +4,7 @@ import './Stoppable.sol';
 
 contract Splitter is Stoppable {
     
-    mapping(address => uint) accountStorage;
+    mapping(address => uint) balances;
 
     event LogEthSent(address sender, uint value, address receiver1, address receiver2);
     event LogWithdrawed(address sender, uint amount);
@@ -13,14 +13,13 @@ contract Splitter is Stoppable {
     
     function splitEth(address receiver1, address receiver2) public _onlyIfRunning payable returns(bool) {
         uint half = msg.value / 2;
-        uint remaining = msg.value % 2;
         
-        if (remaining != 0) {
-            accountStorage[msg.sender] += remaining;
+        if (msg.value % 2 > 0) {
+            balances[msg.sender]++;
         }
         
-        accountStorage[receiver1] += half;
-        accountStorage[receiver2] += half;
+        balances[receiver1] += half;
+        balances[receiver2] += half;
 
         emit LogEthSent(msg.sender, msg.value, receiver1, receiver2);
         
@@ -28,9 +27,9 @@ contract Splitter is Stoppable {
     }
     
     function withdraw() public returns(bool) {
-        uint amount = accountStorage[msg.sender];
+        uint amount = balances[msg.sender];
         
-        accountStorage[msg.sender] = 0;
+        balances[msg.sender] = 0;
         
         emit LogWithdrawed(msg.sender, amount);
 
