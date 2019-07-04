@@ -1,11 +1,10 @@
 pragma solidity 0.5.10;
 
-import './Owned.sol';
+import './Stoppable.sol';
 
-contract Splitter is Owned {
+contract Splitter is Stoppable {
     
     struct Person {
-        address wallet;
         bytes32 name;
         uint    pendingWithdrawals;
         uint    index;
@@ -14,7 +13,6 @@ contract Splitter is Owned {
     
     mapping(address => Person) participantStorage;
     address[] participantList;
-    uint public balance;
 
     event LogParticipantAdded(address participant, bytes32 name);
     event LogPariticipantDeleted(address participant);
@@ -27,14 +25,12 @@ contract Splitter is Owned {
     }
     
     constructor(bytes32 name) public payable {
-        balance = 0;
         addParticipant(msg.sender, name);
     }
     
     function addParticipant(address participant, bytes32 name) public _onlyOwner returns(bool) {
         require(!participantStorage[participant].isParticipant);
         
-        participantStorage[participant].wallet = participant;
         participantStorage[participant].name = name;
         participantStorage[participant].pendingWithdrawals = 0;
         participantStorage[participant].index = participantList.length;
@@ -65,7 +61,7 @@ contract Splitter is Owned {
         bytes32[] memory names = new bytes32[](participantList.length);
 
         for (uint i = 0; i < participantList.length; i++) {
-            addrs[i] = participantStorage[participantList[i]].wallet;
+            addrs[i] = participantList[i];
             names[i] = participantStorage[participantList[i]].name;
         }
         
@@ -76,7 +72,6 @@ contract Splitter is Owned {
         require(msg.value <= msg.sender.balance);
         require(participantList.length > 1);
 
-        balance += msg.value;
         for (uint i = 0; i < participantList.length; i++) {
             if (participantList[i] != msg.sender) {
                 participantStorage[participantList[i]].pendingWithdrawals += msg.value / (participantList.length - 1);
@@ -92,11 +87,14 @@ contract Splitter is Owned {
         return super.changeOwner(newOwner);    
     }
     
+    function getBalance() public view returns(uint256) {
+        return address(this).balance;    
+    }
+    
     function withdraw() public _onlyParticipant returns(bool) {
         uint amount = participantStorage[msg.sender].pendingWithdrawals;
         
         participantStorage[msg.sender].pendingWithdrawals = 0;
-        balance -= amount;
         msg.sender.transfer(amount);
         
         emit LogWithdrawed(msg.sender);
