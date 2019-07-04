@@ -30,9 +30,10 @@ contract Splitter is Stoppable {
         uint amount = accountStorage[msg.sender].pendingWithdrawals;
         
         accountStorage[msg.sender].pendingWithdrawals = 0;
-        msg.sender.transfer(amount);
         
         emit LogWithdrawed(msg.sender, amount);
+
+        msg.sender.transfer(amount);
         
         return true;
     }
