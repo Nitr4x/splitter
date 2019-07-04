@@ -10,8 +10,8 @@ contract Splitter is Stoppable {
     
     mapping(address => Account) accountStorage;
 
-    event LogEthSent(address sender, uint amount);
-    event LogWithdrawed(address receiver);
+    event LogEthSent(address sender, uint value, address receiver1, address receiver2);
+    event LogWithdrawed(address sender, uint amount);
     
     constructor() public payable {}
     
@@ -21,7 +21,7 @@ contract Splitter is Stoppable {
         accountStorage[receiver1].pendingWithdrawals += msg.value / 2;
         accountStorage[receiver2].pendingWithdrawals += msg.value / 2;
 
-        emit LogEthSent(msg.sender, msg.value);
+        emit LogEthSent(msg.sender, msg.value, receiver1, receiver2);
         
         return true;
     }
@@ -36,7 +36,7 @@ contract Splitter is Stoppable {
         accountStorage[msg.sender].pendingWithdrawals = 0;
         msg.sender.transfer(amount);
         
-        emit LogWithdrawed(msg.sender);
+        emit LogWithdrawed(msg.sender, amount);
         
         return true;
     }

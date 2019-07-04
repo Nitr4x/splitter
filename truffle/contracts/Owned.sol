@@ -4,7 +4,7 @@ contract Owned {
     
     address private owner;
     
-    event LogOwnerChanged(address newOwner);
+    event LogOwnerChanged(address indexed newOwner);
     
     modifier _onlyOwner {
         require(msg.sender == owner);
