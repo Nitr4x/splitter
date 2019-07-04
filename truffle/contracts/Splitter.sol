@@ -8,11 +8,16 @@ contract Splitter is Stoppable {
 
     event LogEthSent(address sender, uint value, address receiver1, address receiver2);
     event LogWithdrawed(address sender, uint amount);
-    
+
     constructor() public payable {}
     
     function splitEth(address receiver1, address receiver2) public _onlyIfRunning payable returns(bool) {
         uint half = msg.value / 2;
+        uint remaining = msg.value % 2;
+        
+        if (remaining != 0) {
+            accountStorage[msg.sender] += remaining;
+        }
         
         accountStorage[receiver1] += half;
         accountStorage[receiver2] += half;
@@ -21,7 +26,7 @@ contract Splitter is Stoppable {
         
         return true;
     }
-
+    
     function withdraw() public returns(bool) {
         uint amount = accountStorage[msg.sender];
         
