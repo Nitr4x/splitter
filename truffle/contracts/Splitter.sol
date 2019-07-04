@@ -43,7 +43,7 @@ contract Splitter is Stoppable {
     }
     
     function deleteParticipant(address participant) public _onlyParticipant returns(bool) {
-        require(msg.sender == participant && msg.sender != owner);
+        require(msg.sender == participant && msg.sender != getOwner());
         
         uint index = participantStorage[msg.sender].index;
         
@@ -81,10 +81,6 @@ contract Splitter is Stoppable {
         emit LogEthSent(msg.sender, msg.value);
         
         return true;
-    }
-    
-    function changeOwnernership(address newOwner) public _onlyParticipant _onlyOwner returns(bool) {
-        return super.changeOwner(newOwner);    
     }
     
     function getBalance() public view returns(uint256) {
