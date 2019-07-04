@@ -26,10 +26,6 @@ contract Splitter is Stoppable {
         return true;
     }
     
-    function getBalance() public view returns(uint256) {
-        return address(this).balance;    
-    }
-    
     function withdraw() public returns(bool) {
         uint amount = accountStorage[msg.sender].pendingWithdrawals;
         
