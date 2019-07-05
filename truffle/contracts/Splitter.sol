@@ -14,6 +14,9 @@ contract Splitter is Stoppable {
     function splitEth(address receiver1, address receiver2) public _onlyIfRunning payable returns(bool) {
         uint half = msg.value / 2;
         
+        require(balances[receiver1] + half >= balances[receiver1]
+            && balances[receiver2] + half >= balances[receiver2], 'Balances are full. They should be withdrawed');
+
         if (msg.value % 2 > 0) {
             balances[msg.sender]++;
         }
@@ -27,6 +30,8 @@ contract Splitter is Stoppable {
     }
     
     function withdraw() public returns(bool) {
+        require(balances[msg.sender] > 0);
+
         uint amount = balances[msg.sender];
         
         balances[msg.sender] = 0;
