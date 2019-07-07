@@ -1,9 +1,11 @@
 pragma solidity 0.5.10;
 
+import './SafeMath.sol';
 import './Stoppable.sol';
 
 contract Splitter is Stoppable {
-    
+    using SafeMath for uint;
+
     mapping(address => uint) balances;
 
     event LogEthSent(address sender, uint value, address receiver1, address receiver2);
@@ -13,16 +15,13 @@ contract Splitter is Stoppable {
     
     function splitEth(address receiver1, address receiver2) public _onlyIfRunning payable returns(bool) {
         uint half = msg.value / 2;
-        
-        require(balances[receiver1] + half >= balances[receiver1]
-            && balances[receiver2] + half >= balances[receiver2], 'Balances are full. They should be withdrawed');
 
         if (msg.value % 2 > 0) {
-            balances[msg.sender]++;
+            balances[msg.sender] = balances[msg.sender].add(1);
         }
         
-        balances[receiver1] += half;
-        balances[receiver2] += half;
+        balances[receiver1] = balances[receiver1].add(half);
+        balances[receiver2] = balances[receiver2].add(half);
 
         emit LogEthSent(msg.sender, msg.value, receiver1, receiver2);
         
