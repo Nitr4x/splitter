@@ -11,7 +11,7 @@ contract('Owned', (accounts) => {
                 return instance.getOwner();
             })
             .then(owner => {
-                assert.equal(owner, accounts[0]);
+                assert.strictEqual(owner, accounts[0]);
             });
     });
 
@@ -28,7 +28,7 @@ contract('Owned', (accounts) => {
                 return instance.getOwner();
             })
             .then(owner => {
-                assert.equal(owner, accounts[1]);
+                assert.strictEqual(owner, accounts[1]);
             });
     });
 

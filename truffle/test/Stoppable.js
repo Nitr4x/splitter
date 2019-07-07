@@ -24,8 +24,8 @@ contract('Stoppable', (accounts) => {
                 return instance.pauseContract();
             })
             .then(async (txObj) => {
-                assert.equal(txObj.logs.length, 1);
-                assert.equal(txObj.logs[0].event, "LogPausedContract");
+                assert.strictEqual(txObj.logs.length, 1);
+                assert.strictEqual(txObj.logs[0].event, "LogPausedContract");
 
                 await truffleAssert.reverts(
                     instance.pauseContract() 
@@ -53,8 +53,8 @@ contract('Stoppable', (accounts) => {
                 return instance.pauseContract()
             })
             .then(async (txObj) => {
-                assert.equal(txObj.logs.length, 1);
-                assert.equal(txObj.logs[0].event, "LogPausedContract");
+                assert.strictEqual(txObj.logs.length, 1);
+                assert.strictEqual(txObj.logs[0].event, "LogPausedContract");
                 
                 await truffleAssert.reverts(
                     instance.resumeContract({from: accounts[1]})
@@ -72,14 +72,14 @@ contract('Stoppable', (accounts) => {
                 return instance.pauseContract();
             })
             .then(txObj => {
-                assert.equal(txObj.logs.length, 1);
-                assert.equal(txObj.logs[0].event, "LogPausedContract");
+                assert.strictEqual(txObj.logs.length, 1);
+                assert.strictEqual(txObj.logs[0].event, "LogPausedContract");
                 
                 return instance.resumeContract();
             })
             .then(txObj => {
-                assert.equal(txObj.logs.length, 1);
-                assert.equal(txObj.logs[0].event, "LogResumeContract");
+                assert.strictEqual(txObj.logs.length, 1);
+                assert.strictEqual(txObj.logs[0].event, "LogResumeContract");
             });
     })
 });
