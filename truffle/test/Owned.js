@@ -8,10 +8,7 @@ contract('Owned', (accounts) => {
 
     // Initiating new contract before each test
     beforeEach("Creating new contract", async () => {
-        await Owned.new()
-            .then(_instance => {
-                instance = _instance;
-            });
+        instance = await Owned.new({from: accounts[0]});
     });
 
     // Testing getOwner function.
@@ -24,7 +21,7 @@ contract('Owned', (accounts) => {
 
     // Testing changeOwner function.
     it('Owner should be ' + accounts[1], () => {
-        return instance.changeOwner(accounts[1])
+        return instance.changeOwner(accounts[1], {from: accounts[0]})
             .then(() => {
                 return instance.getOwner();
             })
@@ -35,7 +32,7 @@ contract('Owned', (accounts) => {
 
     // Testing the _onlyOwner modifier.
     it('Changing owner from unauthorized account. changeOwner function should fail', async () => {
-        return await truffleAssert.reverts(
+        await truffleAssert.reverts(
             instance.changeOwner(accounts[1], {from: accounts[1]})
         );               
     });
