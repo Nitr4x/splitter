@@ -25,7 +25,7 @@ contract('Stoppable', (accounts) => {
         assert.strictEqual(txObj.logs[0].event, "LogPausedContract");
 
         await truffleAssert.reverts(
-            instance.pauseContract() 
+            instance.pauseContract({from: accounts[0]}) 
         );
     });
 
@@ -38,7 +38,7 @@ contract('Stoppable', (accounts) => {
 
     // Testing that only the owner is able to resume the contract when paused.
     it('Only the owner should be able to resume the contract', async () => {
-        const txObj = await instance.pauseContract();
+        const txObj = await instance.pauseContract({from: accounts[0]});
         assert.strictEqual(txObj.logs.length, 1);
         assert.strictEqual(txObj.logs[0].event, "LogPausedContract");
         
@@ -49,7 +49,7 @@ contract('Stoppable', (accounts) => {
 
     // Testing the full chain
     it('Pausing and resuming the contract', () => {
-        return instance.pauseContract()
+        return instance.pauseContract({from: accounts[0]})
             .then(txObj => {
                 assert.strictEqual(txObj.logs.length, 1);
                 assert.strictEqual(txObj.logs[0].event, "LogPausedContract");

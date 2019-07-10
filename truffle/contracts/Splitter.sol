@@ -11,7 +11,7 @@ contract Splitter is Stoppable {
     event LogEthSent(address sender, uint value, address receiver1, address receiver2);
     event LogWithdrawed(address sender, uint amount);
     
-    function splitEth(address receiver1, address receiver2) public _onlyIfRunning payable returns(bool) {
+    function splitEth(address receiver1, address receiver2) public _onlyIfRunning payable returns(bool success) {
         require(receiver1 != address(0) && receiver2 != address(0));
 
         uint half = msg.value / 2;
@@ -28,7 +28,7 @@ contract Splitter is Stoppable {
         return true;
     }
     
-    function withdraw() public returns(bool) {
+    function withdraw() public returns(bool success) {
         uint amount = balances[msg.sender];
 
         require(amount > 0);
