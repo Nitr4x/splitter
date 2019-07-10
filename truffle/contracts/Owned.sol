@@ -15,7 +15,7 @@ contract Owned {
         owner = msg.sender;
     }
     
-    function changeOwner(address newOwner) public _onlyOwner returns(bool) {
+    function changeOwner(address newOwner) public _onlyOwner returns(bool success) {
         require(newOwner != address(0));
         
         owner = newOwner;
