@@ -6,10 +6,12 @@ import './Stoppable.sol';
 contract Splitter is Stoppable {
     using SafeMath for uint;
 
-    mapping(address => uint) balances;
+    mapping(address => uint) public balances;
 
-    event LogEthSent(address sender, uint value, address receiver1, address receiver2);
-    event LogWithdrawed(address sender, uint amount);
+    event LogEthSent(address indexed sender, uint value, address receiver1, address receiver2);
+    event LogWithdrawed(address indexed sender, uint amount);
+    
+    constructor(bool state) Stoppable(state) public {}
     
     function splitEth(address receiver1, address receiver2) public _onlyIfRunning payable returns(bool success) {
         require(receiver1 != address(0) && receiver2 != address(0));

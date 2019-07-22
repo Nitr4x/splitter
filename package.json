@@ -1,0 +1,24 @@
+{
+    "name": "Splitter",
+    "description": "B9lab splitter project",
+    "dependencies": {
+        "truffle-contract": "^4.0.25",
+        "vue": "^2.6.10",
+        "web3": "1.0.0-beta.37"
+    },
+    "scripts": {
+        "start": "npx parcel app/index.html --port 8080",
+        "test": "truffle test"
+    },
+    "devDependencies": {
+        "@babel/core": "7.5.4",
+        "@babel/plugin-transform-runtime": "7.5.0",
+        "@babel/runtime": "^7.5.5",
+        "@vue/component-compiler-utils": "^3.0.0",
+        "big-number": "^2.0.0",
+        "parcel-bundler": "^1.12.3",
+        "truffle-assertions": "^0.9.1",
+        "vue-hot-reload-api": "^2.3.3",
+        "vue-template-compiler": "^2.6.10"
+    }
+}
